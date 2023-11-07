@@ -1,5 +1,6 @@
 package com.example.jpashop.service;
 
+import com.example.jpashop.domain.item.Book;
 import com.example.jpashop.domain.item.Item;
 import com.example.jpashop.repository.ItemRepository;
 import lombok.AccessLevel;
@@ -21,6 +22,14 @@ public class ItemService {
     @Transactional
     public void saveItem(Item item) {
         itemRepository.save(item);
+    }
+
+    @Transactional
+    public void updateItem(Long itemId, String name, int price, int stockQuantity) {
+        final Item findItem = itemRepository.findOne(itemId);
+        findItem.setPrice(price);
+        findItem.setName(name);
+        findItem.setStockQuantity(stockQuantity);
     }
 
     public List<Item> findItems() {

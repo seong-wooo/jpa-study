@@ -4,12 +4,14 @@ import com.example.jpashop.domain.item.Item;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderItem {
 
@@ -29,4 +31,22 @@ public class OrderItem {
     int orderPrice;
 
     int count;
+
+    public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setOrderPrice(orderPrice);
+        orderItem.setCount(count);
+
+        item.removeStock(count);
+
+        return orderItem;
+    }
+    public void cancel() {
+        item.addStock(count);
+    }
+
+    public int getTotalPrice() {
+        return orderPrice * count;
+    }
 }
