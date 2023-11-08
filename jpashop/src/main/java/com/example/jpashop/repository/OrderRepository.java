@@ -1,6 +1,5 @@
 package com.example.jpashop.repository;
 
-import com.example.jpashop.domain.Address;
 import com.example.jpashop.domain.Order;
 import com.example.jpashop.domain.OrderSearch;
 import jakarta.persistence.EntityManager;
@@ -11,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -76,5 +74,28 @@ public class OrderRepository {
                         " join o.member m" +
                         " join o.delivery d", OrderSimpleQueryDto.class
         ).getResultList();
+    }
+
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                        "select o from Order o" +
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d" +
+                                " join fetch o.orderItems oi" +
+                                " join fetch oi.item i", Order.class
+                ).setFirstResult(0)
+                .setMaxResults(1)
+                .getResultList();
+    }
+
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                        "select o from Order o" +
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d", Order.class
+                ).setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+
     }
 }
