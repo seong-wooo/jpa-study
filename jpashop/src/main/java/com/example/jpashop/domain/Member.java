@@ -1,5 +1,6 @@
 package com.example.jpashop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AccessLevel;
@@ -28,6 +29,7 @@ public class Member {
 
     // 연관 관계의 주인이 Order이기 때문에, mappedBy를 통해 매핑한다.
     // mappedBy의 member는 Order의 member 필드를 의미한다.
+    @JsonIgnore
     @OneToMany(mappedBy = "member")
     List<Order> orders = new ArrayList<>();
 }
