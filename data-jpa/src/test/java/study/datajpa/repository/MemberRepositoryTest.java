@@ -236,4 +236,23 @@ class MemberRepositoryTest {
     public void callCustom() {
         final List<Member> result = memberRepository.findMemberCustom();
     }
+
+    @Test
+    public void projection(@Autowired EntityManager em) {
+        final Team teamA = new Team("teamA");
+
+        teamRepository.save(teamA);
+
+        final Member member1 = new Member("member1", 10, teamA);
+        memberRepository.save(member1);
+
+        em.flush();
+        em.clear();
+
+        final List<UsernameOnly> result = memberRepository.findProjectionByUsername("member1");
+
+        for (UsernameOnly usernameOnly : result) {
+            System.out.println("usernameOnly = " + usernameOnly.getUsername());
+        }
+    }
 }
